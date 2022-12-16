@@ -16,7 +16,8 @@ public:
             
             if(mp[rem])
                 c+=mp[rem];
-            
+            else if(sum%k==0)
+                c++;
             
             mp[rem]++;
         }
