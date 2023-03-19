@@ -1,44 +1,89 @@
-class TrieNode{
-public:
-    TrieNode *child[26];
-    bool end = false;
-    TrieNode(){
-        for(int i = 0; i < 26; i++)
-            child[i] = NULL;
+struct Node{
+    Node* link[26];
+    bool flag=false;
+    
+    bool isThere(char ch)
+    {
+        return (link[ch-'a']!=NULL);
     }
+    
+    void put(char ch, Node* node)
+    {
+        link[ch-'a']=node;
+    }
+    
+    Node* get(char ch)
+    {
+        return link[ch-'a'];
+    }
+    Node* get(int key)
+    {
+        return link[key];
+    }
+    
+    void makeEnd()
+    {
+        flag=true;
+    }
+    
+    bool isEnd()
+    {
+        return flag;
+    }
+    
 };
 class WordDictionary {
-      TrieNode *root ;
+private:
+    Node* root;
 public:
+
     WordDictionary() {
-        root =  new TrieNode();
+        root=new Node();
     }
     
     void addWord(string word) {
-        int idx = 0;
-        TrieNode * node = root;
-        for(char c: word) {
-            idx = c -'a';
-            if(!node->child[idx])
-                node->child[idx] = new TrieNode();
-            node = node->child[idx];
+        Node* node=root;
+        for(int i=0;i<word.length();i++)
+        {
+            if(!node->isThere(word[i]))
+            {
+                node->put(word[i],new Node());
+            }
+            node=node->get(word[i]);
         }
-        node->end = true;
+        node->makeEnd();
     }
     
-    bool search(string word) {
-        TrieNode *node = root;
-        return search(word, 0, node);
-    }
-    bool search(string &word, int idx , TrieNode *node ) {
-        if(!node) return 0;
-        if(idx == word.size()) return node->end;
-        if(word[idx] != '.')
-            return search(word, idx+1, node->child[word[idx]-'a']);
-
-        for(int key = 0; key< 26; key++)
-            if(search(word, idx+1, node->child[key]))
-                return true;
+    bool search(string &word, Node* node, int idx)
+    {
+        if(!node)return false;
+        if(idx==word.length()) return node->isEnd();
+        
+        if(word[idx]!='.')
+        {
+            return search(word,node->get(word[idx]),idx+1);
+        }
+        else
+        {
+            for(int i=0;i<26;i++)
+            {
+                if(search(word,node->get(i),idx+1))
+                    return true;
+            }
+        }
+        
         return false;
     }
+  
+    bool search(string word) {
+        
+        return search(word,root,0);
+    }
 };
+
+/**
+ * Your WordDictionary object will be instantiated and called as such:
+ * WordDictionary* obj = new WordDictionary();
+ * obj->addWord(word);
+ * bool param_2 = obj->search(word);
+ */
