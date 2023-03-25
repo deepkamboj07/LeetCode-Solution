@@ -49,15 +49,13 @@ public:
         {
             tmp.push_back(it.second);
         }
-        
+        int rem=n;
         n=tmp.size();
         for(int i=0;i<n;i++)
         {
             long long int t=tmp[i];
-            for(int j=i+1;j<n;j++)
-            {
-                ans+=(t*tmp[j]);
-            }
+            ans+=(long long int)(rem-t)*t;
+            rem-=tmp[i];
         }
 
         return ans;
