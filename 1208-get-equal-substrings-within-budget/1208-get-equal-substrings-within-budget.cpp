@@ -16,7 +16,7 @@ public:
             }
             else
             {
-                while(i<j and sum>maxCost)
+                if(i<j and sum>maxCost)
                 {
                     sum-=abs(s[i]-t[i]);
                     i++;
