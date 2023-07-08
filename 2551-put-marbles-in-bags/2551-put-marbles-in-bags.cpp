@@ -1,24 +1,31 @@
 class Solution {
 public:
-    
-    //Observe Again please...
-    
     long long putMarbles(vector<int>& weights, int k) {
-        int n=weights.size();
-        vector<int> sum;
-        for(int i=0;i<n-1;i++)
-        {
-            sum.push_back(weights[i] + weights[i+1]);
-        }
         
-        sort(sum.begin(),sum.end());
-        long long int maxi=0,mini=0;
-        n=sum.size();
-        for(int i=0;i<(k-1);i++)
+        priority_queue<int> pq1;
+        priority_queue<int,vector<int>,greater<int>> pq2;k--;
+       
+        for (int i=0;i<weights.size()-1;i++) 
         {
-            maxi+=sum[i];
-            mini+=sum[n-i-1];
+            pq1.push(weights[i] + weights[i + 1]);
+            pq2.push(weights[i] + weights[i + 1]);
+            if (pq1.size() > k ) {
+                pq1.pop();
+                pq2.pop();
+            }
         }
-        return (mini - maxi);
+       
+       long long ans1=0,ans2=0;
+       while (!pq1.empty()) 
+       {
+            ans1 += pq1.top();
+            ans2 += pq2.top();
+            pq1.pop();
+            pq2.pop();
+       }
+        
+        
+        return ans2-ans1;
+
     }
 };
